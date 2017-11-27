@@ -1,0 +1,39 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+
+<script type="text/javascript" src="ckplayer/ckplayer.js" charset="utf-8"></script>
+
+<div style="background: white"><input style="size:12px; font-size: 22px;height: 20px;line-height: 20px;" type="text" id="info" ></div>
+<div style="background: white"><input style="size:12px; font-size: 22px;height: 20px;line-height: 20px;" type="text" id="info2" ></div>
+
+<div id="vd" class="video" style="position: absolute;width: 1000px;height: 600px;background-color: #777">
+
+
+
+</div>
+<script type="text/javascript">
+   
+var videoObject = {
+		container: '.video',//“#”代表容器的ID，“.”或“”代表容器的class
+		variable: 'player',//该属性必需设置，值等于下面的new chplayer()的对象
+		autoplay:true,//自动播放
+		live:true,//直播视频形式
+	
+		video:'rtmp://live.hkstv.hk.lxdns.com/live/hks'//视频地址
+	};
+	var player=new ckplayer(videoObject);
+   player.switchFull();
+   player.addElement('11111111111');
+   
+   
+   	player.css(player.CB['play'], 'display', 'none');
+</script>
+
+<script type="text/javascript" src="t2.js" charset="utf-8"></script>
+</body>
+</html>

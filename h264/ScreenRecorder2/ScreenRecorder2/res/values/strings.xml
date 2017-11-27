@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">ScreenShare</string>
+    <string name="user_cancelled">User cancelled</string>
+    <string name="no_receiver">Using server mode</string>
+</resources>

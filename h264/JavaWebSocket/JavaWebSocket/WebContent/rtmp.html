@@ -1,0 +1,53 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Insert title here</title>
+
+      <script type="text/javascript" src="flowplayer-3.2.13.min.js"></script>
+
+</head>
+<body>
+
+
+<!-- <div id="wowza" style="width:644px;height:276px;margin:0 auto;text-align:center">
+    <img src="/media/img/player/splash_black.jpg"
+         height="276" width="548" style="cursor:pointer" />
+</div></div> -->
+<a     class="player"
+    style="display:block;width:425px;height:300px;margin:10px auto"
+    id="streams">
+    </a>
+<script type="text/javascript">
+
+$f("streams", "http://releases.flowplayer.org/swf/flowplayer-3.2.18.swf", {
+    clip: {
+ 
+        provider: 'cloudfront',
+  		 url: 'my_lifecast',
+        live: true
+        // combined streams are configured in the "streams" node as follows:
+       // streams: [
+      //     { url: 'metacafe', duration: 10 },
+      //      { url: 'honda_accord', start: 2, duration: 10 },
+      //      { url: 'metacafe', start: 10, duration: 10 },
+      //      { url: 'honda_accord', start: 10, duration: 10 },
+      //      { url: 'metacafe', start: 20, duration: 10 },
+      //      { url: 'honda_accord', start: 20, duration: 10 },
+       //     { url: 'metacafe', start: 30, duration: 10 },
+       //     { url: 'honda_accord', start: 30, duration: 10 }
+      //  ]
+    },
+ 
+    // our rtmp plugin is configured identically as in the first example
+    plugins: {
+        cloudfront: {
+            url: "flowplayer.rtmp-3.2.13.swf",
+            netConnectionUrl: 'rtmp://live.hkstv.hk.lxdns.com/live/hks'
+        }
+    }
+});
+</script>
+
+</body>
+</html>

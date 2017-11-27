@@ -1,0 +1,34 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>CKplayer 超酷Flv播放器演示</title>
+<style>
+	body { padding:20px; font: 12px/1.6 '微软雅黑', 'Microsoft YaHei', Arial; }
+	.videos p { display:block; width:600px; background:#000; clear:both; }
+	textarea { margin-bottom:15px; clear:both; width:600px; }
+</style>
+</head>
+<body style="padding:20px;">
+<script type="text/javascript" src="ck.js?55" charset="utf-8"></script>
+<h1>CKplayer 超酷Flv播放器演示</h1>
+<div class="videos">
+    
+
+    <p id="myvideo7">CKplayer实例八</p>
+</div>
+<script type="text/javascript">
+
+
+	C.K({f:"rtmp://live.hkstv.hk.lxdns.com/live/hks",x:"ckplayer_rtmp.xml"},"myvideo7",600,521);
+
+	function ckplayer_status(str){
+		//document.getElementById('tsk').value=str+'\n'+document.getElementById('tsk').value;
+	}
+	function playerstop(){
+		//alert("实例一，播放完成");
+	}
+
+</script>
+</body>
+</html>
