@@ -39,4 +39,9 @@ vim installation
 
      http://mirrors.flysnow.org/
 
-S
+
+git config --global http.proxy http://user:pwd@server.com:port
+git config --global --unset http.proxy
+
+
+https://www.golangtc.com/download/package
