@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zteict.web.phoneaccount.dao.PhoneAccountDao">
+	<resultMap id="PhoneAccountMap" type="com.zteict.web.phoneaccount.model.PhoneAccount">
+	
+	</resultMap>
+	
+	
+	<select id="getPhoneAccountPageList" parameterType="com.zteict.web.phoneaccount.model.PhoneAccount" resultMap="PhoneAccountMap">
+		select a.*,c.company_name  company_name  from phoneaccount_info a left join company_info c on a.company_userid=c.accountid
+		where 1=1
+		<if test='accountid != null and accountid != "" '>
+			and a.accountid like CONCAT('%',#{accountid},'%')
+		</if>
+		<if test='city != null and city != "" '>
+			and a.city like CONCAT('%',#{city},'%')
+		</if>
+		<if test='ip != null and ip != "" '>
+			and a.ip like CONCAT('%',#{ip},'%')
+		</if>
+		<if test='company_name != null and company_name != "" '>
+			and c.company_name like CONCAT('%',#{company_name},'%')
+		</if>
+
+		limit #{start},#{pageCount}
+	</select>
+	
+	<select id="getPhoneAccountPageListCount" parameterType="com.zteict.web.phoneaccount.model.PhoneAccount" resultType="java.lang.Integer">
+		select count(*) from phoneaccount_info a left join company_info c on a.company_userid=c.accountid
+		where 1=1
+		<if test='accountid != null and accountid != "" '>
+			and a.accountid like CONCAT('%',#{accountid},'%')
+		</if>
+			<if test='city != null and city != "" '>
+			and a.city like CONCAT('%',#{city},'%')
+		</if>
+		<if test='ip != null and ip != "" '>
+			and a.ip like CONCAT('%',#{ip},'%')
+		</if>
+		<if test='company_name != null and company_name != "" '>
+			and c.company_name like CONCAT('%',#{company_name},'%')
+		</if>
+		
+		
+	</select>
+	
+<select id="getPhoneAccountInfoById" parameterType="java.lang.Integer" resultType="com.zteict.web.phoneaccount.model.PhoneAccount">
+		select * from phoneaccount_info where recordid = #{id}
+	</select>
+	
+<select id="getPhoneAccountInfoByAccountId" parameterType="java.lang.String" resultType="com.zteict.web.phoneaccount.model.PhoneAccount">
+		select * from phoneaccount_info where accountid = #{id}
+	</select>
+	
+	<insert id="addPhoneAccount" parameterType="com.zteict.web.phoneaccount.model.PhoneAccount">
+	    
+	 
+	    
+		insert into phoneaccount_info 
+		(accountid,pass,ip_refresh_interval,city,
+		ip,company_userid,create_date )
+		values(#{accountid},#{pass},#{ip_refresh_interval},#{city},
+		#{ip},#{company_userid},now())
+	</insert>
+	
+	<update id="updatePhoneAccount" parameterType="com.zteict.web.phoneaccount.model.PhoneAccount">
+		update phoneaccount_info set
+		update_date=now()
+		<if test='pass != null'>
+			,pass=#{pass}
+		</if>
+		<if test='ip_refresh_interval != null'>
+			,ip_refresh_interval=#{ip_refresh_interval}
+		</if>
+		<if test='city != null'>
+			,city=#{city}
+		</if>
+		<if test='ip != null'>
+			,ip=#{ip}
+		</if>
+		
+		where recordid=#{recordid}
+	</update>
+	
+	<delete id="deletePhoneAccount"  parameterType="java.lang.Integer">
+		delete from phoneaccount_info where recordid = #{id}
+	</delete>
+	
+	
+</mapper>
+  
+
+
+
+
+

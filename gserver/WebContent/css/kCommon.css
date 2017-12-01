@@ -1,0 +1,169 @@
+@CHARSET "UTF-8";
+
+
+.modal.in .modal-dialog{-webkit-transform:translate(0,-50%);-ms-transform:translate(0,-50%);-o-transform:translate(0,-50%);transform:translate(0,-50%)}
+.modal-dialog{position:absolute;width:auto;margin:10px auto;left:0;right:0;top:50%}
+
+ /* @media (min-width:768px){.modal-dialog{width:600px} */
+ 
+.row-margin-top-20 {
+	margin-top: 20px;
+}
+
+table
+{
+
+	color:#777;
+} 
+
+@media(min-width:768px)
+{
+	.pull-right-k
+	{
+	float:right!important;
+	}
+	
+	.modal-dialog{width:600px;} 
+	
+}
+
+
+.margin-top-10 {
+	margin-top: 10px;
+}
+
+.padding-top-0
+{
+	padding-top: 0px!important;
+}
+.row-margin-top-50 {
+	margin-top: 50px;
+}
+
+.login_back2
+{
+	 background: #1f4433;
+}
+
+.login_back
+{
+	 background: #0BB5D9;
+	/**background: #9EC8F5;  */
+}
+
+.row-margin-top-70 {
+	margin-top: 70px;
+}
+
+body {
+	overflow: auto !important;
+}
+
+.modal {
+	overflow: auto !important;
+}
+.error
+{
+	color: red;
+}
+.margin-top-5 {
+	margin-top: 5px;
+}
+
+
+.input-group[class*=col-] {
+	/* 	float: left !important; */
+	
+}
+
+.radius {
+	border: 1px solid #ccc !important;
+	border-radius: 4px !important;
+	-webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075) !important;
+	box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075) !important;
+	-webkit-transition: border-color ease-in-out .15s, -webkit-box-shadow
+		ease-in-out .15s !important;
+	-o-transition: border-color ease-in-out .15s, box-shadow ease-in-out
+		.15s !important;
+	transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s
+		!important;
+}
+
+.red {
+	color: red;
+	font-weight: bold;
+}
+
+.form-group .control-label, .form-group .text-right {
+	line-height: 34px;
+}
+
+.min-width-400 {
+	min-width: 200px;
+}
+
+.margin5 {
+	margin: 5px !important;
+}
+
+.time {
+	margin-top: 5px;
+	color: #888;
+}
+
+.row {
+	/* 	margin:10px auto!important; */
+	
+}
+
+.padding-right-0
+{
+	padding-right: 0px;
+	
+}
+.margin-bottom-5 {
+	margin-bottom: 5px;
+}
+.margin-bottom-10 {
+	margin-bottom: 10px;
+}
+.form-control {
+	height: auto;
+}
+
+.tablefoot>select{
+	position: relative;
+    float: left;
+    padding: 6px 12px;
+    margin:20px  10px ;
+    line-height: 1.42857143;
+    color: #337ab7;
+    text-decoration: none;
+    background-color: #fff;
+    border: 1px solid #ddd;
+	
+}
+
+.rightico {
+	display: inline-block;
+	min-width: 10px;
+	padding: 3px 7px;
+	font-size: 12px;
+	font-weight: bold;
+	/*     line-height: 3; */
+	/* color: #fff; */
+	text-align: center;
+	white-space: nowrap;
+	vertical-align: baseline;
+	/* background-color: #999; */
+	border-radius: 10px;
+}
+/* .line-height-3 */
+/* { */
+/* 	line-height: 3; */
+/* } */
+
+/* .line-height-4 */
+/* { */
+/* 	line-height: 4; */
+/* } */

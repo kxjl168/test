@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<!-- 基本配置 -->
+	<ConfigItem>
+		<ConfigName>CompanyName</ConfigName>
+		<ConfigValue>深圳中兴网信</ConfigValue>
+		<ConfigDesc>公司名称</ConfigDesc>
+	</ConfigItem>
+
+
+	
+	
+	
+</Config>
