@@ -35,6 +35,10 @@ function changerows(option)
 
 
 function init() {
+	
+	initmenu($("#menuul"),"page/device");
+	
+	
 	var $scope = angular.element(ngSection).scope();
 	$scope.$apply(function() {
 
@@ -106,6 +110,9 @@ $("#cpType2").select2({
 		
 		$scope.getList = function(id, fucOnFinished, clear) {
 
+			
+			
+			
 			$scope.page = (id != null) ? id :1;
 			
 			
@@ -132,6 +139,10 @@ $("#cpType2").select2({
 			obj.city = $scope.city;// "12345678";
 			obj.deviceid = $scope.deviceid;// "12345678";
 			obj.ip = $scope.ip;
+			
+			obj.showall = $scope.showall?"false":"true";
+			
+			//msg(obj.showall);
 			
 			
 			obj.page = $scope.page;// 1;// "12345678";

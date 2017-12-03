@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zteict.web.system.dao.SysUserDao">
+
+	<resultMap id="ManagerResMap" type="com.zteict.web.system.model.SysUserBean">
+		<result column="managerid" property="userid" />
+		<result column="managername" property="name" />
+		<result column="password" property="password" />
+		<result column="role_id" property="role_id" />
+		<result column="role_name" property="role_name" />
+		<result column="menu_ids" property="menu_ids" />
+	</resultMap>
+	
+	
+	
+	<select id="getUserInfoByUseridAndPwd" resultMap="ManagerResMap"
+		parameterType="com.zteict.web.system.model.SysUserBean">
+		select managerid,managername,password,rm.* from manager
+		m
+		left join manager_role mr on m.managerid=mr.manager_id
+		left join role_menu rm on mr.role_id=rm.role_id
+		where m.managerid =
+		#{userid} and password = #{password}
+
+	</select>
+	
+
+	
+	<update id="updateSysuer" 
+		parameterType="com.zteict.web.system.model.SysUserBean">
+	
+	update manager set  password = #{password} where managerid=#{userid}
+	
+	</update>
+	
+	<select id="getUserListInfo" resultMap="ManagerResMap"
+		parameterType="com.zteict.web.system.model.SysUserBean">
+		select managerid,managername,password from manager m
+		 where 1=1
+		 	<if test='name != null and name !="" '>
+
+		and ( managername like CONCAT('%',#{name},'%')	 
+			or  managerid like CONCAT('%',#{name},'%') )	 
+		</if>
+		
+
+	</select>
+	
+
+</mapper>

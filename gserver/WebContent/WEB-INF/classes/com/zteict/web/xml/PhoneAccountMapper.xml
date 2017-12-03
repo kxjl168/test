@@ -78,6 +78,9 @@
 		<if test='ip != null'>
 			,ip=#{ip}
 		</if>
+		<if test='company_userid != null'>
+			,company_userid=#{company_userid}
+		</if>
 		
 		where recordid=#{recordid}
 	</update>

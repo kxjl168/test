@@ -10,6 +10,17 @@
 	margin-top: 20px;
 }
 
+
+.ck{
+	padding-left: 20px;
+    margin-bottom: 0;
+    font-weight: 400;
+    cursor: pointer;
+    line-height: 34px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
 table
 {
 

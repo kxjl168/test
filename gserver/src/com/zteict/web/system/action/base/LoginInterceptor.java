@@ -47,6 +47,12 @@ public class LoginInterceptor implements HandlerInterceptor {
 			logger.info("请求Action为" + reqAction);
 			return true;
 		}
+		
+		if(reqAction.contains("login"))
+		{
+			logger.info("请求Action为" + reqAction);
+			return true;
+		}
 
 		// logger.info("验证用户是否登录");
 		HttpSession session = request.getSession();
@@ -57,13 +63,16 @@ public class LoginInterceptor implements HandlerInterceptor {
 		if (user == null || user.getUserid() == null
 				|| user.getUserid().isEmpty()) {
 			
-			request.getRequestDispatcher("/loginin.action")
+			
+			
+			
+			request.getRequestDispatcher("/login.jsp")
 			.forward(request, response);
 			
 //			request.getRequestDispatcher("loginin.action").forward(request,
 //					response);
 			
-			logger.info("session-id:" + session.getId());
+			//logger.info("session-id:" + session.getId());
 			
 			logger.info("用户没有登录");
 			return false;

@@ -9,6 +9,30 @@ import com.zteict.web.system.model.base.BaseModel;
  *
  */
 public class SysUserBean extends BaseModel {
+	
+	
+	
+	public enum UserType{
+		
+		Admin("admin"),Company("company");
+		
+		
+		private String val="";
+		
+		private UserType(String name)
+		{
+			val=name;
+		}
+		
+		@Override
+		public String toString() {
+			// TODO Auto-generated method stub
+			return val;
+		}
+	}
+	
+	
+	
 	private String userid;// 用户名
 	private String name;// 用户名
 
@@ -20,6 +44,8 @@ public class SysUserBean extends BaseModel {
 	private String updatedby; // 更新者
 	private String updateddate;// 更新时间
 
+	private UserType utype;
+	
 	
 	
 	//查询字段
@@ -106,6 +132,14 @@ public class SysUserBean extends BaseModel {
 
 	public void setUpdateddate(String updateddate) {
 		this.updateddate = updateddate;
+	}
+
+	public UserType getUtype() {
+		return utype;
+	}
+
+	public void setUtype(UserType utype) {
+		this.utype = utype;
 	}
 
 

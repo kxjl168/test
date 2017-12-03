@@ -21,7 +21,7 @@
 <body id="ngSection" ng-app="myApp" ng-controller="eduCtrl">
 
 
-	<div class="container" id="content"  style="overflow: hidden;">
+	<div class="container" id="content"  style="">
 
 		<nav class="navbar navbar-default navbar-fixed-top navbar-inverse" role="navigation">
 			<div class="navbar-header  ">
@@ -49,10 +49,10 @@
 					</div>
 				</form>
 				
-				<ul class="nav navbar-nav ">
-										<li class="active"><a href="#">设备状态</a></li>
+				<ul class="nav navbar-nav " id="menuul">
+										<!-- <li class="active"><a href="#">设备状态</a></li>
 										<li><a  href="#" ng-click="load('log')">转发日志</a></li>
-										<li class="hide"><a href="">登出</a></li>  
+										<li class="hide"><a href="">登出</a></li>   -->
 
 				</ul>
 				
@@ -101,7 +101,7 @@
 					
 									<div class="row  form-group margin-bottom-5">
 											<div class=" col-md-6  col-xs-12 ">
-													<div class="control-label padding-top-0 col-xs-4 col-md-2 ">位置：</div>
+													<div class="control-label padding-top-0 col-xs-4 col-md-3 col-lg-3 ">位置：</div>
 													<div class="col-md-6 col-xs-8 text-right ">
 														 <input type="text" class="form-control" id="city" ng-model="city" placeholder="请输入位置">
 			
@@ -109,7 +109,7 @@
 												</div>
 
 												<div class=" col-md-6  col-xs-12  ">
-														<div class="control-label padding-top-0 col-xs-4 col-md-2">设备ID：</div>
+														<div class="control-label padding-top-0 col-xs-4 col-md-3 col-lg-3">设备ID：</div>
 														<div class="col-md-6 col-xs-8 text-right ">
 															 <input type="text" class="form-control" id="deviceid" ng-model="deviceid" placeholder="请输入设备ID">
 				
@@ -118,15 +118,25 @@
 									</div>
 									<div class="row  form-group margin-bottom-5">
 											<div class=" col-md-6  col-xs-12 ">
-													<div class="control-label padding-top-0 col-xs-4 col-md-2 ">设备IP：</div>
+													<div class="control-label padding-top-0 col-xs-4 col-md-3 col-lg-3">设备IP：</div>
 													<div class="col-md-6 col-xs-8 text-right ">
 														 <input type="text" class="form-control" id="ip" ng-model="ip" placeholder="请输入设备IP">
 			
 													</div>
 												</div>
+												
+												
+													<div class=" col-md-6  col-xs-12  ">
+														<div class="control-label padding-top-0 col-xs-4 col-md-3 col-lg-3 ">状态：</div>
+														<div class="col-md-6 col-xs-8  row">
+														
+														<div class="control-label pull-left">
+    <input type="checkbox" name="isonline"  ng-click="getList()"  ng-model="showall" class="ck" value="">在线
+</div>
+													</div>
 
 												<div class="hide col-md-6  col-xs-12  ">
-														<div class="control-label padding-top-0 col-xs-4 col-md-2">用户名：</div>
+														<div class="control-label padding-top-0 col-xs-4 col-md-3 col-lg-3">用户名：</div>
 														<div class="col-md-6 col-xs-8 text-right ">
 															 <input type="text" class="form-control" id="name" placeholder="请输入名称">
 				
@@ -152,7 +162,7 @@
 								<table class="table">
 									<caption>
 										{{title}}
-										<div class=" col-lg-2 col-md-2 col-xs-4 pull-right margin-bottom-10 padding-right-0 ">
+										<div class=" hide col-lg-2 col-md-2 col-xs-4 pull-right margin-bottom-10 padding-right-0 ">
 											<button type="button" data-toggle="modal" data-target="#myModal2" class="btn btn-primary btn-block   ">新增子账号</button>
 										</div>
 										<div class=" col-lg-2 col-md-2 col-xs-4 pull-right margin-bottom-10 padding-right-0 ">
@@ -165,6 +175,7 @@
 											<th>IP</th>
 											<th>出口位置</th>
 											<th>上线时间</th>
+											<th ng-show="!showall">下线时间</th>
 										</tr>
 										
 									</thead>
@@ -173,10 +184,11 @@
 					
 									
 										<tr ng-repeat="x in datalist">
-											 <td>{{ x.deviceid }}</td>
+											 <td>{{ x.routeid }}</td>
 											 <td>{{ x.ip }}</td>
 											 <td>{{ x.city }}</td>
 											 <td>{{ x.onlinetime }}</td>
+											  <td ng-show="!showall">{{ x.offlinetime }}</td>
 										</tr>
 									
 									
@@ -426,6 +438,7 @@
 	<script type="text/javascript"
 		src="../../js/plugin/swiper/idangerous.swiper.min.js"></script>
 
+	<script src="../../js/menu.js "></script>
 	
 	<script src="../../js/loading.js"></script>
 

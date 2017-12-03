@@ -41,6 +41,13 @@
 <select id="getCompanyInfoById" parameterType="java.lang.Integer" resultType="com.zteict.web.company.model.Company">
 		select * from company_info where recordid = #{id}
 	</select>
+
+
+<select id="getCompanyInfoByAccountAndPass" parameterType="java.util.Map" resultType="com.zteict.web.company.model.Company">
+		select * from company_info where accountid = #{id} and pass=#{pass}
+	</select>
+
+
 	
 <select id="getCompanyInfoByAccountId" parameterType="java.lang.String" resultType="com.zteict.web.company.model.Company">
 		select * from company_info where accountid = #{id}
@@ -77,7 +84,7 @@
 		</if>
 		
 		
-		where accountid=#{accountid}
+		where recordid=#{recordid}
 	</update>
 	
 	<delete id="deleteCompany"  parameterType="java.lang.Integer">

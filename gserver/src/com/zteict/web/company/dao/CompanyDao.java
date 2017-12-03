@@ -48,8 +48,14 @@ public interface CompanyDao {
 	 */
 	public int updateCompany(Company Company);
 	
+	/**
+	 * 登录
+	 * @param bannerID
+	 * @return
+	 * @date 2016-8-4
+	 */
+	public Company getCompanyInfoByAccountAndPass(@Param(value="id")String id,@Param(value="pass")String pass);
 	
-
 	/**
 	 * 根据accountID获取Company信息
 	 * @param bannerID

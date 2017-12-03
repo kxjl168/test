@@ -18,6 +18,11 @@
 		<if test='ip != null and ip != "" '>
 			and ip like CONCAT('%',#{ip},'%')
 		</if>
+		<if test='showall != null and showall == "false" '>
+			and offlinetime is null
+		</if>
+		
+		
 
 		limit #{start},#{pageCount}
 	</select>
@@ -33,6 +38,9 @@
 		</if>
 		<if test='ip != null and ip != "" '>
 			and ip like CONCAT('%',#{ip},'%')
+		</if>
+		<if test='showall != null and showall == "false" '>
+			and offlinetime is null
 		</if>
 		
 	</select>

@@ -38,6 +38,8 @@ function changerows(option)
 function init() {
 	
 	
+	initmenu($("#menuul"),"page/company");
+	
 	$('#collapseOne').on('shown.bs.collapse', function () {
 	    // 执行一些动作...
 		$("#titlepic").attr("class", "glyphicon glyphicon-chevron-up pull-right"); 
@@ -47,6 +49,11 @@ function init() {
 		$("#titlepic").attr("class", "glyphicon glyphicon-chevron-down pull-right"); 
 });
 	//$('#collapseOne').collapse();
+	$('.modal').on('show.bs.modal', function () {
+		  $(this).draggable();
+		    $(this).css("overflow-y", "scroll");   // 防止出现滚动条，出现的话，你会把滚动条一起拖着走的
+	});
+	
 	
 	
 	var $scope = angular.element(ngSection).scope();
@@ -90,10 +97,7 @@ $("#cpType2").select2({
 			"data" : $scope.cpTypes
 		});
 		
-		$scope.load = function(type) {
-
-			window.location.href="../../page/"+type;
-		};
+		
 		
 		$scope.citys_select=['上海','南京','无锡','扬州','苏州'];
 		
@@ -103,10 +107,136 @@ $("#cpType2").select2({
 		}
 		var http = getImUrl();// "";
 
+		
+		$scope.del=function(item)
+		{
+			if(item==null)
+				return;
+			
+			var id= item.recordid;
+			
+			
+			
+		$("#myModal3").modal("show");
+		$("#btnconfirm").one("click",function ()
+		{
+		
+			
+			
+			
+			var obj={};
+			
+			obj.recordid=id;
+			
+				SZUMWS(http + "company/del.action", JSON
+						.stringify(obj), function succsess(json) {
+
+					var code = json.ResponseCode;
+					var message = json.ResponseMsg;
+					console.log('-----return -code= ' + code + ';message= '
+							+ message);
+					if (code == 200) {
+			
+						msg("删除成功！");
+						
+						$("#myModal3").modal("hide");
+						
+						$scope.getList();
+					
+
+					} else {
+						msg(message);
+					}
+
+				
+					
+				
+
+				}, function error(data) {
+					msg("网络异常!");
+					//$("#myModal2").modal('hide');
+					
+					
+
+				}, false, false
+
+				);
+				
+				//$("#btnconfirm").unbind("click",delfun(id));
+				
+				
+		});
+		
+		}
+		
+		$scope.addOrModify=function(item)
+		{
+			if(item!=null)
+				{
+				
+				$scope.s_recordid=item.recordid;
+				$scope.s_account=item.accountid;
+				$scope.s_pass=item.pass;
+				$scope.s_company=item.company_name;
+				$scope.s_desc=item.desc_info;
+				$scope.s_ip_desc=item.ip_desc;
+				$scope.s_ip_refresh=parseInt( item.ip_refresh_interval);
+				
+				$("#s_account").attr('disabled','');
+				
+				}
+			else
+				{
+				
+				$("#s_account").removeAttr('disabled');
+				
+				$scope.s_recordid="";
+				$scope.s_account="";
+				$scope.s_pass="";
+				$scope.s_company="";
+				$scope.s_desc="";
+				$scope.s_ip_desc="";
+				$scope.s_ip_refresh="";
+		
+				}
+			
+			
+			//$scope.getcompayList();
+			$("#myModal2").modal('show');
+		}
+		var http = getImUrl();// "";
+
+		
+		
+		
 		$scope.update=function()
 		{
 			
+			if($scope.fm.s_account.$error.required)
+			{
+			error("用户ID必须要填写");
+			return;
+			}
+		if($scope.fm.s_pass.$error.required)
+		{
+			error("密码必须要填写");
+		return;
+		}
+		
+		if($scope.fm.s_ip_refresh.$error.required)
+		{
+			error("刷新时间必须要填写");
+		return;
+		}
+		
+		if($scope.fm.s_ip_refresh.$invalid)
+		{
+			error("刷新时间为数字");
+		return;
+		}
+			
 			var obj={};
+			obj.recordid=$scope.s_recordid;
 			obj.accountid=$scope.s_account;
 			obj.pass=$scope.s_pass;
 			obj.company_name=$scope.s_company;
@@ -123,36 +253,42 @@ $("#cpType2").select2({
 						+ message);
 				if (code == 200) {
 		
-					$scope.s_account="";
-					$scope.s_pass="";
-					$scope.s_company="";
-					$scope.s_desc="";
-					$scope.s_ip_desc="";
-					$scope.s_ip_refresh="";
 					
-					$scope.$apply();
 					
 					$("#myModal2").modal('hide');
 						
 					$scope.getList();
+					
+					setTimeout(function(){
+						$scope.s_account="";
+						$scope.s_pass="";
+						$scope.s_company="";
+						$scope.s_desc="";
+						$scope.s_ip_desc="";
+						$scope.s_ip_refresh="";
+						
+						$scope.$apply();
+					},1000);
+					
+					
 				
 
 				} else {
 					msg(message);
 				}
 
-				if (fucOnFinished != null)
+			/*	if (fucOnFinished != null)
 					fucOnFinished();
-				
+				*/
 			
 
 			}, function error(data) {
 				msg("网络异常!");
 				//$("#myModal2").modal('hide');
 				
-				if (fucOnFinished != null)
+				/*if (fucOnFinished != null)
 					fucOnFinished();
-
+*/
 			}, false, false
 
 			);

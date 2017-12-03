@@ -46,8 +46,8 @@ $(function() {
 
 function checkLogin() {
 	
-	window.location.href = basePath + "/page/entry";
-	return;
+	/*window.location.href = basePath + "/page/company";
+	return;*/
 	
 	
 	if(!validate())
@@ -56,11 +56,11 @@ function checkLogin() {
 	var userName = $("#username").val();
 	var passWord = $("#password").val();
 	if (userName.length == 0) {
-		$.messager.alert("操作提示", "请输入用户名！", "info");
+		error( "请输入用户名！");//, "info");
 		$("#username").focus();
 		return;
 	} else if (passWord.length == 0) {
-		$.messager.alert("操作提示", "请输入密码！", "info");
+		error( "请输入密码！");
 		$("#password").focus();
 		return;
 	} else {
@@ -74,9 +74,12 @@ function checkLogin() {
 			dataType : "json",
 			success : function(data) {
 				if (data.sucess) {
-					window.location.href = basePath + "/main.do";
+					if(data.type="company")
+					window.location.href = basePath + "/page/pccountM";
+					else
+						window.location.href = basePath + "/page/company";
 				} else {
-					$.messager.alert("操作提示", data.msg, "info");
+					error( data.msg);//, "info");
 				}
 			}
 		});

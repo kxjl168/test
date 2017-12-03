@@ -44,19 +44,28 @@
 
 				</form>
 
-				<ul class="nav navbar-nav ">
-					<li class="active">
+				<ul id="menuul" class="nav navbar-nav ">
+					<!-- <li class="active">
 						<a href="#">{{title}}</a>
 					</li>
 					<li >
-						<a href="#" ng-click="load('pccount')">子账号管理</a>
+						<a href="#" ng-click="load('pccount')">手机账号管理</a>
 					</li>
+					
+					<li >
+						<a href="#" ng-click="load('device')">路由器管理</a>
+					</li>
+					<li >
+						<a href="#" ng-click="load('translog')">流量日志</a>
+					</li>
+					
+					
 					<li>
 						<a href="#" ng-click="load('set')">设置</a>
 					</li>
 					<li class="">
 						<a href="">登出</a>
-					</li>
+					</li> -->
 
 				</ul>
 
@@ -105,7 +114,7 @@
 					
 									<div class="row  form-group margin-bottom-5">
 											<div class=" col-md-6  col-xs-12 ">
-													<div class="control-label padding-top-0 col-xs-4 col-md-2 ">位置：</div>
+													<div class="control-label padding-top-0 col-xs-4 col-md-3 col-lg-3 ">位置：</div>
 													<div class="col-md-6 col-xs-8 text-right ">
 														 <input type="text" class="form-control" id="city" ng-model="city" placeholder="请输入位置">
 			
@@ -113,7 +122,7 @@
 												</div>
 
 												<div class=" col-md-6  col-xs-12  ">
-														<div class="control-label padding-top-0 col-xs-4 col-md-2">用户ID：</div>
+														<div class="control-label padding-top-0 col-xs-4 col-md-3 col-lg-3">用户ID：</div>
 														<div class="col-md-6 col-xs-8 text-right ">
 															 <input type="text" class="form-control" id="deviceid" ng-model="id" placeholder="请输入设备ID">
 				
@@ -122,7 +131,7 @@
 									</div>
 									<div class="row  form-group margin-bottom-5">
 											<div class=" col-md-6  col-xs-12 ">
-													<div class="control-label padding-top-0 col-xs-4 col-md-2 ">手机IP：</div>
+													<div class="control-label padding-top-0 col-xs-4 col-md-3 col-lg-3 ">手机IP：</div>
 													<div class="col-md-6 col-xs-8 text-right ">
 														 <input type="text" class="form-control" id="ip" ng-model="ip" placeholder="请输入设备IP">
 			
@@ -130,7 +139,7 @@
 												</div>
 
 												<div class=" col-md-6  col-xs-12  ">
-														<div class="control-label padding-top-0 col-xs-4 col-md-2">公司名称：</div>
+														<div class="control-label padding-top-0 col-xs-4 col-md-3 col-lg-3">公司名称：</div>
 														<div class="col-md-6 col-xs-8 text-right ">
 															 <input type="text" class="form-control" id="name" ng-model="compy_name" placeholder="请输入名称">
 				
@@ -157,7 +166,7 @@
 									<caption>
 										{{title}}
 										<div class=" col-lg-2 col-md-2 col-xs-4 pull-right margin-bottom-10 padding-right-0 ">
-											<button type="button" ng-click="newCompany()"  class="btn btn-primary btn-block   ">新增公司</button>
+											<button type="button" ng-click="addOrModify()"  class="btn btn-primary btn-block   ">新增公司</button>
 										</div>
 										<div class=" col-lg-2 col-md-2 col-xs-4 pull-right margin-bottom-10 padding-right-0 ">
 											<button type="button" ng-click="getList()" class="btn btn-primary btn-block   ">查询</button>
@@ -170,7 +179,7 @@
 											<th>IP段</th>
 											<th>出口IP刷新周期</th>
 											<th>描述</th>
-											
+											<th>操作</th>
 										</tr>
 										
 									</thead>
@@ -183,6 +192,11 @@
 											 <td>{{ x.ip_desc }}</td>
 											 <td>{{ x.ip_refresh_interval }}</td>
 											 <td>{{ x.desc_info }}</td>
+											 
+											 	<td><a href="#" class="text-info" ng-click="addOrModify(x)">修改</a>
+								<a href="#" class="text-warning" ng-click="del(x)">删除</a>
+								
+								</td>
 										</tr>
 									
 									
@@ -317,38 +331,55 @@
 
 				<div class="modal-body container margin-top-10 " >
 				<div class="row " >
-					<form class="form-horizontal col-xs-12 col-lg-12 " style="min-width: 150px; ">
+					<form name="fm" class="form-horizontal col-xs-12 col-lg-12 " style="min-width: 150px; ">
 				
 
 					
+						<input  type="text " class="hide form-control " name="s_recordid" id="s_recordid " ng-model="s_recordid" placeholder=" ">
 					
 					
 					<div class="form-group col-xs-12 row ">
 							<div class="control-label padding-top-0 col-xs-4 ">用户ID：</div>
-							<div class="col-xs-8 text-right ">
-							 <input type="text" class="form-control" id="name" ng-model="s_account" placeholder="">
+							<div class="col-xs-7 text-right ">
+							 <input required type="text" class="form-control" id="s_account" name="s_account" ng-model="s_account" placeholder="">
 							 
 							
 
+							</div>
+							
+							<div class="col-xs-1 text-right ">
+							 <span ng-show="fm.s_account.$error.required">
+							<span style="color:red" title="用户ID必须填写">
+							<span class="glyphicon glyphicon-remove"></span>
+							</span> 
+							 </span>
 							</div>
 						</div>
 						
 					
 					<div class="form-group col-xs-12 row ">
 							<div class="control-label padding-top-0 col-xs-4 ">密码：</div>
-							<div class="col-xs-8 text-right ">
+							<div class="col-xs-7 text-right ">
 						
 						
-						 <input type="text" class="form-control"  type="password " id="name" ng-model="s_pass" placeholder="">
+						 <input required type="text" class="form-control"  type="password " id="s_pass" name="s_pass" ng-model="s_pass" placeholder="">
 							 
 						
+							</div>
+							
+							 <div class="col-xs-1 text-right ">
+							 <span ng-show="fm.s_pass.$error.required">
+							<span style="color:red" title="密码必须填写">
+							<span class="glyphicon glyphicon-remove"></span>
+							</span> 
+							 </span>
 							</div>
 						</div>
 						
 					
 						<div class="form-group col-xs-12 row ">
 							<div class="control-label padding-top-0 col-xs-4 ">公司名称：</div>
-							<div class="col-xs-8 text-right ">
+							<div class="col-xs-7 text-right ">
 								 <input type="text" class="form-control"  id="name" ng-model="s_company" placeholder="">
 						
 
@@ -357,7 +388,7 @@
 						
 						<div class="form-group col-xs-12 row ">
 							<div class="control-label padding-top-0 col-xs-4 ">描述：</div>
-							<div class="col-xs-8 text-right ">
+							<div class="col-xs-7 text-right ">
 								 <textarea type="text" class="form-control"  id="name" ng-model="s_desc" placeholder="">
 						</textarea>
 
@@ -366,7 +397,7 @@
 						
 						<div class="form-group col-xs-12 row ">
 							<div class="control-label padding-top-0 col-xs-4 ">IP段：</div>
-							<div class="col-xs-8 text-right ">
+							<div class="col-xs-7 text-right ">
 								 <textarea type="text" class="form-control"  id="name" ng-model="s_ip_desc" placeholder="">
 								 </textarea>
 						
@@ -376,9 +407,22 @@
 						
 						<div class="form-group col-xs-12 row ">
 							<div class="control-label padding-top-0 col-xs-4 ">出口IP刷新周期：</div>
-							<div class="col-xs-8 text-right ">
-								 <input type="text" class="form-control"  id="name" ng-model="s_ip_refresh" placeholder="">
+							<div class="col-xs-7 text-right ">
+								 <input required type="number" ng-patter="/^\d*$/"  min="9" max="1000"  class="form-control"  id="name" name= "s_ip_refresh" ng-model="s_ip_refresh" placeholder="">
 					
+							</div>
+							 <div class="col-xs-1 text-right ">
+							 <span ng-show="fm.s_ip_refresh.$error.required">
+							<span style="color:red" title="刷新周期必须填写">
+							<span class="glyphicon glyphicon-remove"></span>
+							</span> 
+							 </span>
+							 
+							  <span ng-show=" fm.s_ip_refresh.$invalid">
+							<span style="color:red" title="刷新周期为大于9的数字">
+							<span class="glyphicon glyphicon-remove"></span>
+							</span> 
+							 </span>
 							</div>
 						</div>
 
@@ -397,11 +441,42 @@
 	</div>
 
 
+
+
+<div class="modal fade" id="myModal3" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-dialog" style="width: 250px;">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+					<h4 class="modal-title" id="myModalLabel">确认操作</h4>
+				</div>
+
+
+
+				<div class="modal-body container margin-top-10 " ">
+				<div class="row " >
+					
+					<p class="col-xs-10">确认执行操作吗？</p>
+					
+				</div>
+				</div>
+				<div class="modal-footer ">
+					<button type="button " class="btn btn-default btn-warning " data-dismiss="modal">取消
+					</button>
+					                 <button id="btnconfirm" type="button " class="btn btn-primary " > 确定 </button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
 </script>
 
 	<script type="text/javascript "
 		src="../../js/plugin/jquery/jquery.v1.11.3.js "></script>
 
+<script type="text/javascript "
+		src="../../js/plugin/jquery/jquery-ui.js "></script>
 
 	<script type="text/javascript "
 		src="../../js/plugin/angular/angular.min.js "></script>
@@ -428,6 +503,11 @@
 
 	
 	<script src="../../js/loading.js "></script>
+	
+	
+		<script src="../../js/menu.js "></script>
+	
+	
 
 	<script type="text/javascript "
 		src="../../js/plugin/select2/select2.full.min.js "></script>

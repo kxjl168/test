@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zteict.web.privilege.dao.RoleDao">
+
+	<resultMap id="ManagerResMap" type="com.zteict.web.privilege.model.Role">
+	</resultMap>
+
+	<resultMap id="MenuMap" type="com.zteict.web.system.model.MenuInfo">
+	</resultMap>
+
+
+
+	<!-- public int addRole(Role Role); -->
+
+	<insert id="addRole" parameterType="com.zteict.web.privilege.model.Role">
+		insert into role
+		(role_en,role_zh,role_desc,createby,createdate)
+		values(#{role_en},#{role_zh},#{role_desc},#{createby},#{createdate})
+	</insert>
+
+
+	<!-- public int deleteRole(Role role); -->
+
+	<delete id="deleteRole" parameterType="com.zteict.web.privilege.model.Role">
+		delete from role
+		where role_en = #{role_en}
+	</delete>
+
+
+	<!-- public int updateRole(Role Role); -->
+
+	<update id="updateRole" parameterType="com.zteict.web.privilege.model.Role">
+		update role set
+		updatedate=now()
+		<if test='role_zh != null and role_zh!="" '>
+			,role_zh=#{role_zh}
+		</if>
+		<if test='role_desc != null'>
+			,role_desc=#{role_desc}
+		</if>
+
+
+		where role_en=#{role_en}
+	</update>
+
+
+
+
+<!-- 	public List<MenuInfo> getRoleMenusList(Role query); -->
+<select id="getRoleMenusList" parameterType="com.zteict.web.privilege.model.Role"
+		resultMap="MenuMap">
+select distinct menu.menu_id menuId from 
+role_menu rm 
+ left join menu_info menu on menu.menu_id=rm.menu_id
+ left join role r on rm.role_id=r.role_en
+		where r.role_en=#{role_en}
+
+	</select>
+
+	<!-- public List<Role> getRolePageList(Role query); -->
+
+	<select id="getRolePageList" parameterType="com.zteict.web.privilege.model.Role"
+		resultMap="ManagerResMap">
+		select * from role
+		where 1=1
+		<if test='role_zh != null and role_zh != "" '>
+			and role_zh like CONCAT('%',#{role_zh},'%')
+		</if>
+		<if test='role_en != null and role_en != "" '>
+			and role_en like CONCAT('%',#{role_en},'%')
+		</if>
+		order by role_en limit #{start},#{pageCount}
+	</select>
+
+	<!-- public int getRolePageListCount(Role query); -->
+
+	<select id="getRolePageListCount" parameterType="com.zteict.web.privilege.model.Role"
+		resultType="java.lang.Integer">
+		select count(*) from role
+		where 1=1
+		<if test='role_zh != null and role_zh != "" '>
+			and role_zh like CONCAT('%',#{role_zh},'%')
+		</if>
+		<if test='role_en != null and role_en != "" '>
+			and role_en like CONCAT('%',#{role_en},'%')
+		</if>
+
+	</select>
+
+
+
+	<!-- public Role getRoleInfoById(Role query); -->
+
+
+	<select id="getRoleInfoById" resultType="com.zteict.web.privilege.model.Role"
+		parameterType="com.zteict.web.privilege.model.Role">
+		select role_en,role_zh,role_desc from role
+		m
+	
+		where m.role_en =
+		#{role_en}
+	</select>
+
+
+
+
+
+
+
+</mapper>

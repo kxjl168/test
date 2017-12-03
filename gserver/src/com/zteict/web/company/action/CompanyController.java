@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.ibatis.annotations.Param;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 
 import com.zteict.tool.common.Constant;
 import com.zteict.tool.utils.JEscape;
@@ -46,7 +48,54 @@ public class CompanyController extends BaseController {
 		return view;
 	}
 
-	
+	@RequestMapping(value = "/getDetail")
+	public void getCompanyInfoByAccountId(HttpServletRequest request,
+			HttpServletResponse response)
+	{
+		//String data = request.getParameter("data");
+		JSONObject jsonIN;
+		JSONObject jsonOut = new JSONObject();
+
+		String rst = "";
+		try {
+
+
+			
+			SysUserBean user = (SysUserBean) request.getSession().getAttribute(Constant.SESSION_USER);
+			if(user!=null)
+			{
+				
+			}
+
+			Company detail= companyService.getCompanyInfoByAccountId(user.getUserid());
+
+			
+			
+			Gson gs = new Gson();
+			String jsStr = gs.toJson(detail);
+
+			jsonOut.put("ResponseCode", "200");
+			jsonOut.put("ResponseMsg", "");
+			jsonOut.put("total", 1);
+			jsonOut.put("datalist", jsStr);
+
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+
+			try {
+				jsonOut.put("ResponseCode", "201");
+				jsonOut.put("ResponseMsg", "");
+				jsonOut.put("total", 0);
+				jsonOut.put("datalist", "");
+			} catch (Exception e2) {
+				// TODO: handle exception
+			}
+
+		}
+		rst = jsonOut.toString();
+		JsonUtil.responseOutWithJson(response, rst);
+	}
 	
 	/**
 	 * 页面-获取company列表
@@ -208,6 +257,7 @@ public class CompanyController extends BaseController {
 			}
 
 		} catch (Exception e2) {
+			System.out.println(e2.getMessage());
 			try {
 				jsonOut.put("ResponseCode", "201");
 				jsonOut.put("ResponseMsg", "FAILED");
@@ -233,8 +283,8 @@ public class CompanyController extends BaseController {
 	public @ResponseBody
 	Map delBanner(HttpServletRequest request) {
 		Map res = new HashMap();
-		res.put("responseCode", "201");
-		res.put("responseMsg", "删除失败");
+		res.put("ResponseCode", "201");
+		res.put("ResponseMsg", "删除失败");
 		String data = request.getParameter("data");
 		JSONObject jsonIN;
 
@@ -245,11 +295,11 @@ public class CompanyController extends BaseController {
 			int recordid = jsonIN.optInt("recordid");
 
 			if (companyService.deleteCompany(recordid) > 0) {
-				res.put("responseCode", "200");
-				res.put("responseMsg", "删除成功");
+				res.put("ResponseCode", "200");
+				res.put("ResponseMsg", "删除成功");
 			} else {
-				res.put("responseCode", "201");
-				res.put("responseMsg", "删除失败");
+				res.put("ResponseCode", "201");
+				res.put("ResponseMsg", "删除失败");
 			}
 		} catch (Exception e) {
 

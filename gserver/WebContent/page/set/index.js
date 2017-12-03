@@ -21,6 +21,10 @@ $(function() {
 });
 
 function init() {
+	
+	initmenu($("#menuul"),"page/set");
+	
+	
 	var $scope = angular.element(ngSection).scope();
 	$scope.$apply(function() {
 
@@ -54,8 +58,154 @@ function init() {
 			"data" : $scope.cpTypes
 		});
 		
+		var http=getImUrl();
 		
+		$scope.getDetail=function()
+		{
 			
+		var obj={};
+		
+		SZUMWS(http + "company/getDetail.action", JSON
+				.stringify(obj), function succsess(json) {
+
+			var code = json.ResponseCode;
+			var message = json.ResponseMsg;
+			console.log('-----return -code= ' + code + ';message= '
+					+ message);
+			if (code == 200) {
+	
+				
+				$scope.detail=eval("("+json.datalist+")");
+				//$("#myModal2").modal('hide');
+				
+				$scope.s_recordid=$scope.detail.recordid;
+				$scope.s_account=$scope.detail.accountid;
+				$scope.s_pass=$scope.detail.pass;
+				$scope.s_company=$scope.detail.company_name;
+				$scope.s_desc=$scope.detail.desc_info;
+				$scope.s_ip_desc=$scope.detail.ip_desc;
+				$scope.s_ip_refresh=parseInt( $scope.detail.ip_refresh_interval);
+				
+				$scope.$apply();
+				
+				
+			
+
+			} else {
+				msg(message);
+			}
+
+		/*	if (fucOnFinished != null)
+				fucOnFinished();
+			*/
+		
+
+		}, function error(data) {
+			msg("网络异常!");
+			//$("#myModal2").modal('hide');
+			
+			/*if (fucOnFinished != null)
+				fucOnFinished();
+*/
+		}, false, false
+
+		);
+		}
+		
+	
+		$scope.getDetail();
+	
+	
+	$scope.update=function()
+	{
+		
+		if($scope.fm.s_account.$error.required)
+		{
+		error("用户ID必须要填写");
+		return;
+		}
+	if($scope.fm.s_pass.$error.required)
+	{
+		error("密码必须要填写");
+	return;
+	}
+	
+	if($scope.fm.s_ip_refresh.$error.required)
+	{
+		error("刷新时间必须要填写");
+	return;
+	}
+	
+	if($scope.fm.s_ip_refresh.$invalid)
+	{
+		error("刷新时间为数字");
+	return;
+	}
+		
+		var obj={};
+		obj.recordid=$scope.s_recordid;
+		obj.accountid=$scope.s_account;
+		obj.pass=$scope.s_pass;
+		obj.company_name=$scope.s_company;
+		obj.desc=$scope.s_desc;
+		obj.ip_desc=$scope.s_ip_desc;
+		obj.ip_refresh_interval=$scope.s_ip_refresh;
+		
+		SZUMWS(http + "company/addOrUpdate.action", JSON
+				.stringify(obj), function succsess(json) {
+
+			var code = json.ResponseCode;
+			var message = json.ResponseMsg;
+			console.log('-----return -code= ' + code + ';message= '
+					+ message);
+			if (code == 200) {
+	
+				
+				
+				$("#myModal2").modal('hide');
+					
+				//$scope.getList();
+				$scope.getDetail();
+				
+				$scope.$apply();
+				/*setTimeout(function(){
+					$scope.s_account="";
+					$scope.s_pass="";
+					$scope.s_company="";
+					$scope.s_desc="";
+					$scope.s_ip_desc="";
+					$scope.s_ip_refresh="";
+					
+					
+				},1000);
+				*/
+				
+			
+
+			} else {
+				msg(message);
+			}
+
+		/*	if (fucOnFinished != null)
+				fucOnFinished();
+			*/
+		
+
+		}, function error(data) {
+			msg("网络异常!");
+			//$("#myModal2").modal('hide');
+			
+			/*if (fucOnFinished != null)
+				fucOnFinished();
+*/
+		}, false, false
+
+		);
+		
+		
+	}
+		
+		
 		$scope.load = function(type) {
 
 			window.location.href="../../page/"+type;

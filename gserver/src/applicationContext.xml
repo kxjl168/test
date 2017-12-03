@@ -46,7 +46,7 @@
 		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
 		<property name="viewClass"
 			value="org.springframework.web.servlet.view.JstlView" />
-		<property name="prefix" value="/jsp" />
+		<property name="prefix" value="/" />
 		<property name="suffix" value=".jsp" />
 	</bean>
 	<!-- 配置多文件上传 -->
@@ -70,14 +70,19 @@
 	
 	<mvc:interceptors>
 		<!-- 使用bean定义一个Interceptor，直接定义在mvc:interceptors根下面的Interceptor将拦截所有的请求 -->
-	
+	 <bean class="com.zteict.web.system.action.base.LoginInterceptor"/>
 		<mvc:interceptor>
 			    <mvc:mapping path="/*.do" />  
                         <!-- 二级目录 -->  
             <mvc:mapping path="/*/*.do" />  
+            
+              <mvc:mapping path="*.html" />
+              <mvc:mapping path="*.jsp" />  
+               <mvc:mapping path="*" />  
+            
 			<!-- 定义在mvc:interceptor下面的表示是对特定的请求才进行拦截的 -->
 		
-			<bean class="com.zteict.web.system.action.base.LoginInterceptor"/>
+			<bean class="com.zteict.web.system.action.base.LoginInterceptor"/> 
 		</mvc:interceptor>
 		
 		<mvc:interceptor>

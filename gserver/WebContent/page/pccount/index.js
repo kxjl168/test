@@ -17,6 +17,8 @@ $(function () {
 	}*/
 
 	init();
+	
+
 
 });
 
@@ -36,7 +38,8 @@ function changerows(option) {
 
 function init() {
 
-
+	initmenu($("#menuul"),"page/pccount");
+	
 	$('#collapseOne').on('shown.bs.collapse', function () {
 		// 执行一些动作...
 		$("#titlepic").attr("class", "glyphicon glyphicon-chevron-up pull-right");
@@ -45,8 +48,15 @@ function init() {
 	$('#collapseOne').on('hidden.bs.collapse', function () {
 		$("#titlepic").attr("class", "glyphicon glyphicon-chevron-down pull-right");
 	});
+	
 
-
+	$('.modal').on('show.bs.modal', function () {
+		  $(this).draggable();
+		    $(this).css("overflow-y", "scroll");   // 防止出现滚动条，出现的话，你会把滚动条一起拖着走的
+	});
+	
+	
+	
 
 	var $scope = angular.element(ngSection).scope();
 	$scope.$apply(function () {
@@ -94,6 +104,8 @@ function init() {
 			window.location.href = "../../page/" + type;
 		};
 
+		
+		
 		$scope.del=function(item)
 		{
 			if(item==null)
@@ -101,8 +113,10 @@ function init() {
 			
 			var id= item.recordid;
 			
+			
+			
 		$("#myModal3").modal("show");
-		$("#btnconfirm").click(function()
+		$("#btnconfirm").one("click",function ()
 		{
 		
 			
@@ -145,7 +159,12 @@ function init() {
 				}, false, false
 
 				);
+				
+				//$("#btnconfirm").unbind("click",delfun(id));
+				
+				
 		});
+		
 		}
 		
 		$scope.addOrModify=function(item)
@@ -157,14 +176,23 @@ function init() {
 				$scope.s_city=item.city;
 				$scope.s_company=item.company_userid;
 				$scope.s_recordid=item.recordid;
-				$scope.s_ip_refresh=item.ip_refresh_interval;
+				$scope.s_ip_refresh=parseInt(item.ip_refresh_interval);
+				
+				$("#s_account").attr('disabled','');
+				
 				}
 			else
 				{
+				
+				$("#s_account").removeAttr('disabled');
+				
 				$scope.s_account="";
 				$scope.s_pass="";
 				$scope.s_city="";
 				$scope.s_company="";
+				
+				$("#s_company").val("");
+				
 				$scope.s_recordid="";
 				$scope.s_ip_refresh="";
 				}
@@ -189,13 +217,31 @@ function init() {
 			return;
 			}
 			
+			if($scope.fm.s_company.$error.required)
+			{
+				error("公司必须要填写");
+			return;
+			}
+//			if($scope.fm.s_ip_refresh.$error.required)
+//			{
+//				error("刷新时间必须要填写");
+//			return;
+//			}
+			
+			if($scope.fm.s_ip_refresh.$invalid)
+			{
+				error("刷新时间为数字");
+			return;
+			}
+			
+			
 			var obj={};
 			
 			obj.recordid=$scope.s_recordid;
 			obj.accountid=$scope.s_account;
 			obj.pass=$scope.s_pass;
 			obj.company_userid= $("#s_company").val();   //$scope.s_company;
-			obj.city= $("#s_city").val();  //$scope.s_city;
+			obj.city= $scope.s_city;// $("#s_city").val();  //$scope.s_city;
 
 			obj.ip_refresh_interval=$scope.s_ip_refresh;
 			
@@ -208,6 +254,12 @@ function init() {
 						+ message);
 				if (code == 200) {
 		
+					
+					
+					$("#myModal2").modal('hide');
+						
+					$scope.getList();
+					setTimeout(function(){
 					$scope.s_account="";
 					$scope.s_pass="";
 					$scope.s_company="";
@@ -215,18 +267,14 @@ function init() {
 					$scope.s_ip_refresh="";
 					
 					$scope.$apply();
-					
-					$("#myModal2").modal('hide');
-						
-					$scope.getList();
-				
+					},1000);
 
 				} else {
 					msg(message);
 				}
-
+/*
 				if (fucOnFinished != null)
-					fucOnFinished();
+					fucOnFinished();*/
 				
 			
 
@@ -234,8 +282,8 @@ function init() {
 				msg("网络异常!");
 				//$("#myModal2").modal('hide');
 				
-				if (fucOnFinished != null)
-					fucOnFinished();
+			/*	if (fucOnFinished != null)
+					fucOnFinished();*/
 
 			}, false, false
 

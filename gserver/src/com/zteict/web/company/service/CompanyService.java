@@ -59,6 +59,15 @@ public interface CompanyService {
 	public Company getCompanyInfoByAccountId(@Param(value="id")String id);
 	
 	/**
+	 * 登录
+	 * @param bannerID
+	 * @return
+	 * @date 2016-8-4
+	 */
+	public Company getCompanyInfoByAccountAndPass(@Param(value="id")String id,@Param(value="pass")String pass);
+	
+	
+	/**
 	 * 根据ID获取Company信息
 	 * @param bannerID
 	 * @return

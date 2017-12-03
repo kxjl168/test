@@ -44,8 +44,8 @@
 
 				</form>
 
-				<ul class="nav navbar-nav ">
-					<li>
+				<ul class="nav navbar-nav "  id="menuul">
+					<!-- <li>
 						<a href="#" ng-click="load('company')">公司账号管理</a>
 					</li>
 					<li class="active">
@@ -56,7 +56,7 @@
 					</li>
 					<li class="">
 						<a href="">登出</a>
-					</li>
+					</li> -->
 
 				</ul>
 
@@ -103,7 +103,7 @@
 
 							<div class="row  form-group margin-bottom-5">
 								<div class=" col-md-6  col-xs-12 ">
-									<div class="control-label padding-top-0 col-xs-4 col-md-2 ">位置：</div>
+									<div class="control-label padding-top-0 col-xs-4 col-md-3 col-lg-3">位置：</div>
 									<div class="col-md-6 col-xs-8 text-right ">
 										<input type="text" class="form-control" id="city" ng-model="city" placeholder="请输入位置">
 
@@ -111,7 +111,7 @@
 								</div>
 
 								<div class=" col-md-6  col-xs-12  ">
-									<div class="control-label padding-top-0 col-xs-4 col-md-2">用户ID：</div>
+									<div class="control-label padding-top-0 col-xs-4 col-md-3 col-lg-3">用户ID：</div>
 									<div class="col-md-6 col-xs-8 text-right ">
 										<input type="text" class="form-control" id="deviceid" ng-model="id" placeholder="请输入设备ID">
 
@@ -120,7 +120,7 @@
 							</div>
 							<div class="row  form-group margin-bottom-5">
 								<div class=" col-md-6  col-xs-12 ">
-									<div class="control-label padding-top-0 col-xs-4 col-md-2 ">手机IP：</div>
+									<div class="control-label padding-top-0 col-xs-4 col-md-3 col-lg-3 ">手机IP：</div>
 									<div class="col-md-6 col-xs-8 text-right ">
 										<input type="text" class="form-control" id="ip" ng-model="ip" placeholder="请输入设备IP">
 
@@ -128,7 +128,7 @@
 								</div>
 
 								<div class=" col-md-6  col-xs-12  ">
-									<div class="control-label padding-top-0 col-xs-4 col-md-2">公司名称：</div>
+									<div class="control-label padding-top-0 col-xs-4 col-md-3 col-lg-3">公司名称：</div>
 									<div class="col-md-6 col-xs-8 text-right ">
 										<input type="text" class="form-control" id="name" ng-model="compy_name" placeholder="请输入名称">
 
@@ -322,13 +322,13 @@
 					<form name="fm" class="form-horizontal col-xs-12 col-lg-12 " style="min-width: 150px; ">
 				
 
-					<input  type="text " class="hide form-control " name="s_recordid" id="s_recordid " ng-model="s_recordid " placeholder=" ">
+					<input   type="text " class="hide form-control " name="s_recordid" id="s_recordid " ng-model="s_recordid " placeholder=" ">
 					
 					
 					<div class="form-group col-xs-12 row ">
 							<div class="control-label padding-top-0 col-xs-4 ">用户ID：</div>
 							<div class="col-xs-7 text-right ">
-							 <input required type="text " class="form-control " name="s_account" id="s_account " ng-model="s_account " placeholder=" ">
+							 <input required disabled type="text " class="form-control  " name="s_account" id="s_account" ng-model="s_account " placeholder=" ">
 							 </div>
 							 <div class="col-xs-1 text-right ">
 							 <span ng-show="fm.s_account.$error.required">
@@ -360,9 +360,22 @@
 						<div class="form-group col-xs-12 row ">
 								<div class="control-label padding-top-0 col-xs-4 ">出口IP刷新周期：</div>
 								<div class="col-xs-7 text-right ">
-									 <input type="text" class="form-control"  id="name" ng-model="s_ip_refresh" placeholder="">
-						
-								</div>
+								 <input  type="number" ng-patter="/^\d*$/"  min="9" max="1000"  class="form-control"  id="name" name= "s_ip_refresh" ng-model="s_ip_refresh" placeholder="">
+					
+							</div>
+							 <div class="col-xs-1 text-right ">
+							<!--  <span ng-show="fm.s_ip_refresh.$error.required">
+							<span style="color:red" title="刷新周期必须填写">
+							<span class="glyphicon glyphicon-remove"></span>
+							</span> 
+							 </span> -->
+							 
+							  <span ng-show=" fm.s_ip_refresh.$invalid">
+							<span style="color:red" title="刷新周期为大于9的数字">
+							<span class="glyphicon glyphicon-remove"></span>
+							</span> 
+							 </span>
+							</div>
 							</div>
 					
 
@@ -376,15 +389,27 @@
 									<option  ng-repeat="x in citys_select ">{{x}}</option>
 								</select>
 							</div>
+							
+							
+							
 						</div>
 						
 						<div class="form-group col-xs-12 row ">
 							<div class="control-label padding-top-0 col-xs-4 ">所属公司：</div>
 							<div class="col-xs-7 text-right ">
-								<select class="form-control" id="s_company" ng-model="s_company">
+								<select class="form-control" required id="s_company" name="s_company" ng-model="s_company">
 									<option  ng-repeat="x in compays_select " value="{{x.accountid}}">{{x.company_name}}</option>
 								</select>
 							</div>
+							
+							<div class="col-xs-1 text-right ">
+							 <span ng-show="fm.s_company.$error.required">
+							<span style="color:red" title="公司必选填写">
+							<span class="glyphicon glyphicon-remove"></span>
+							</span> 
+							 </span>
+							</div>
+							
 						</div>
 					
 
@@ -435,6 +460,13 @@
 	<script type="text/javascript "
 		src="../../js/plugin/jquery/jquery.v1.11.3.js "></script>
 
+	<script type="text/javascript "
+		src="../../js/plugin/bootstrap/js/bootstrap.min.js "></script>
+
+<script type="text/javascript "
+		src="../../js/plugin/jquery/jquery-ui.js "></script>
+
+
 
 	<script type="text/javascript "
 		src="../../js/plugin/angular/angular.min.js "></script>
@@ -452,13 +484,12 @@
 		src="../../js/plugin/jquery/noty.themes.bootstrap.js "></script>
 
 
-	<script type="text/javascript "
-		src="../../js/plugin/bootstrap/js/bootstrap.min.js "></script>
 
 
 	<script type="text/javascript "
 		src="../../js/plugin/swiper/idangerous.swiper.min.js "></script>
-
+<script src="../../js/menu.js "></script>
+	
 	
 	<script src="../../js/loading.js "></script>
 

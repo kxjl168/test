@@ -16,7 +16,7 @@ import com.zteict.web.system.dao.SystemParamsDao;
 public class CompanyServiceImpl implements CompanyService{
 	
 	@Autowired
-	CompanyDao phoneDao;
+	CompanyDao companyDao;
 	
 	@Autowired
 	SystemParamsDao sysDao;
@@ -29,8 +29,20 @@ public class CompanyServiceImpl implements CompanyService{
 	 */
 	@Override
 	public List<Company> getCompanyPageList(Company query) {
-		return phoneDao.getCompanyPageList(query);
+		return companyDao.getCompanyPageList(query);
 	}
+	
+	/**
+	 * 登录
+	 * @param bannerID
+	 * @return
+	 * @date 2016-8-4
+	 */
+	public Company getCompanyInfoByAccountAndPass(@Param(value="id")String id,@Param(value="pass")String pass)
+	{
+		return companyDao.getCompanyInfoByAccountAndPass(id, pass);
+	}
+	
 
 	/**
 	 * 获取banner总条数
@@ -40,22 +52,22 @@ public class CompanyServiceImpl implements CompanyService{
 	 */
 	@Override
 	public int getCompanyPageListCount(Company query) {
-		return phoneDao.getCompanyPageListCount(query);
+		return companyDao.getCompanyPageListCount(query);
 	}
 
 	@Override
 	public int addCompany(Company Company) {
-		return phoneDao.addCompany(Company);
+		return companyDao.addCompany(Company);
 	}
 
 	@Override
 	public int deleteCompany(@Param("id") Integer id) {
-		return phoneDao.deleteCompany(id);
+		return companyDao.deleteCompany(id);
 	}
 
 	@Override
 	public int updateCompany(Company Company) {
-		return phoneDao.updateCompany(Company);
+		return companyDao.updateCompany(Company);
 	}
 	/**
 	 * 根据accountID获取Company信息
@@ -65,7 +77,7 @@ public class CompanyServiceImpl implements CompanyService{
 	 */
 	public Company getCompanyInfoByAccountId(@Param(value="id")String id)
 	{
-		return phoneDao.getCompanyInfoByAccountId(id);
+		return companyDao.getCompanyInfoByAccountId(id);
 	}
 	
 	/**
@@ -76,7 +88,7 @@ public class CompanyServiceImpl implements CompanyService{
 	 */
 	public Company getCompanyInfoById(@Param(value="id")Integer id)
 	{
-		return phoneDao.getCompanyInfoById(id);
+		return companyDao.getCompanyInfoById(id);
 	}
 
 	

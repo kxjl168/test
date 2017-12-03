@@ -16,7 +16,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.google.gson.Gson;
 import com.zteict.tool.common.Constant;
+import com.zteict.tool.utils.JsonUtil;
 import com.zteict.web.privilege.model.Role;
 import com.zteict.web.privilege.service.PrivilegeService;
 import com.zteict.web.system.action.base.BaseController;
@@ -45,8 +47,7 @@ public class MenuInfoController extends BaseController {
 	private Logger logger = Logger.getLogger(MenuInfoController.class);
 
 	@RequestMapping(value = "/getRootMenus")
-	public @ResponseBody
-	List<MenuInfo> getRootMenus(HttpSession session) {
+	public void getRootMenus(HttpServletRequest request,HttpServletResponse response, HttpSession session) {
 
 		List<MenuInfo> rst = new ArrayList<MenuInfo>();
 
@@ -56,38 +57,81 @@ public class MenuInfoController extends BaseController {
 		SysUserBean user = (SysUserBean) session
 				.getAttribute(Constant.SESSION_USER);
 
-		List<Role> roles = privilegeService.getManagerRoleList(user);
-
-		// 过滤权限
-		if (roles != null) {
-
-			for (int i = 0; i < roles.size(); i++) {
-				if (roles.get(i).getRole_en().equals("root")) {
-					rst = menus;
-					break;
-				}
+		if (user == null)
+		{
+			try {
+				request.getRequestDispatcher("/login")
+				.forward(request, response);
+			} catch (Exception e) {
+				// TODO: handle exception
 			}
-			
-			//普通权限
-			if (rst.size() == 0) {
+		
+			return ;
+		}
+		
+		
+		
 
-				List<MenuInfo> menuList = privilegeService
-						.getManagerMenusList(user);
-
-				if (menuList != null) {
-					for (int i = 0; i < menus.size(); i++) {
-						for (int j = 0; j < menuList.size(); j++) {
-							if (menuList.get(j).getMenuId()
-									.equals(menus.get(i).getMenuId()))
-								rst.add(menus.get(i));
-						}
-
-					}
-				}
+		for (int i = 0; i < menus.size(); i++) {
+			if (menus.get(i).getMenuGroup().contains(user.getUtype().toString()))
+				rst.add(menus.get(i));
+		}
+		
+		boolean isOk=false;
+		String Referer = request.getHeader("referer");
+		for (int i = 0; i < rst.size(); i++) {
+			if(Referer.contains(rst.get(i).getMenuUrl()))
+			{
+				isOk=true;
+				break;
 			}
 		}
+		
+		if(!isOk)
+		{
+			JSONObject jout=new JSONObject();
+			try {
+				jout.put("toIndex", "true");
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			JsonUtil.responseOutWithJson(response, jout.toString());
+			return;
+		}
+		
+		
+		Gson gs=new Gson();
+		String jsStr=gs.toJson(rst);
+		 
+		
 
-		return rst;
+		JsonUtil.responseOutWithJson(response, jsStr);
+
+		// 权限过滤 todo
+
+		/*
+		 * List<Role> roles = privilegeService.getManagerRoleList(user);
+		 * 
+		 * // 过滤权限 if (roles != null) {
+		 * 
+		 * for (int i = 0; i < roles.size(); i++) { if
+		 * (roles.get(i).getRole_en().equals("root")) { rst = menus; break; } }
+		 * 
+		 * //普通权限 if (rst.size() == 0) {
+		 * 
+		 * List<MenuInfo> menuList = privilegeService
+		 * .getManagerMenusList(user);
+		 * 
+		 * if (menuList != null) { for (int i = 0; i < menus.size(); i++) { for
+		 * (int j = 0; j < menuList.size(); j++) { if
+		 * (menuList.get(j).getMenuId() .equals(menus.get(i).getMenuId()))
+		 * rst.add(menus.get(i)); }
+		 * 
+		 * } } } }
+		 * 
+		 * return rst;
+		 */
 	}
 
 	//
@@ -107,7 +151,6 @@ public class MenuInfoController extends BaseController {
 	List<MenuGroup> getMenusByParentId(String pid, HttpServletRequest request,
 			HttpServletResponse response, HttpSession session) {
 
-	
 		List<MenuInfo> menus = menuService.queryMenusByParent(pid);
 		if (pid.equals("machineManager")) {
 			for (MenuInfo menu : menus) {
@@ -121,39 +164,37 @@ public class MenuInfoController extends BaseController {
 		SysUserBean user = (SysUserBean) session
 				.getAttribute(Constant.SESSION_USER);
 
-		List<MenuInfo> rst =new ArrayList<MenuInfo>();
+		List<MenuInfo> rst = new ArrayList<MenuInfo>();
 		List<Role> roles = privilegeService.getManagerRoleList(user);
-		
+
 		// 过滤权限
-				if (roles != null) {
+		if (roles != null) {
 
-					for (int i = 0; i < roles.size(); i++) {
-						if (roles.get(i).getRole_en().equals("root")) {
-							rst = menus;
-							break;
+			for (int i = 0; i < roles.size(); i++) {
+				if (roles.get(i).getRole_en().equals("root")) {
+					rst = menus;
+					break;
+				}
+			}
+
+			// 普通权限
+			if (rst.size() == 0) {
+
+				List<MenuInfo> menuList = privilegeService
+						.getManagerMenusList(user);
+
+				if (menuList != null) {
+					for (int i = 0; i < menus.size(); i++) {
+						for (int j = 0; j < menuList.size(); j++) {
+							if (menuList.get(j).getMenuId()
+									.equals(menus.get(i).getMenuId()))
+								rst.add(menus.get(i));
 						}
-					}
-					
-					//普通权限
-					if (rst.size() == 0) {
 
-						List<MenuInfo> menuList = privilegeService
-								.getManagerMenusList(user);
-
-						if (menuList != null) {
-							for (int i = 0; i < menus.size(); i++) {
-								for (int j = 0; j < menuList.size(); j++) {
-									if (menuList.get(j).getMenuId()
-											.equals(menus.get(i).getMenuId()))
-										rst.add(menus.get(i));
-								}
-
-							}
-						}
 					}
 				}
-				
-		
+			}
+		}
 
 		// 分组
 		List<MenuGroup> groups = new ArrayList<MenuGroup>();

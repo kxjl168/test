@@ -48,19 +48,8 @@ public class PhoneAccountController extends BaseController {
 
 	
 	
-	/**
-	 * 页面-获取phoneaccount列表
-	 * 
-	 * @param clientType
-	 * @param packageName
-	 * @param curPage
-	 *            当前页
-	 * @param pageCount
-	 *            每页多少条
-	 * @return
-	 */
-	@RequestMapping(value = "/getCompayList")
-	public void getCompayList(HttpServletRequest request,
+	@RequestMapping(value = "/getInfoCList")
+	public void getInfoCList(HttpServletRequest request,
 			HttpServletResponse response) {
 		// String phoneaccountid = request.getParameter("phoneaccountid");
 
@@ -78,35 +67,15 @@ public class PhoneAccountController extends BaseController {
 		try {
 
 			jsonIN = new JSONObject(data);
-
-			String compy_name = jsonIN.optString("compy_name");
-			String ip = jsonIN.optString("ip");
-			String id = jsonIN.optString("id");
-			String city = jsonIN.optString("city");
-
-			int pageCount = jsonIN.optInt("rows");// request.getParameter("pageCount");
-			int curPage = jsonIN.optInt("page");
-
-			PhoneAccount query = new PhoneAccount();
-			query.setPage(curPage);
-			query.setPageCount(pageCount);
-
-			query.setIp(ip);
-			query.setCity(city);
-			query.setAccountid(id);
-			query.setCompany_name(compy_name);
-
-			List<PhoneAccount> infos = phoneaccountService
-					.getPhoneAccountPageList(query);
-			int total = phoneaccountService.getPhoneAccountPageListCount(query);
-
-			Gson gs = new Gson();
-			String jsStr = gs.toJson(infos);
-
-			jsonOut.put("ResponseCode", "200");
-			jsonOut.put("ResponseMsg", "");
-			jsonOut.put("total", total);
-			jsonOut.put("datalist", jsStr);
+			
+			
+			SysUserBean user = (SysUserBean) request.getSession().getAttribute(Constant.SESSION_USER);
+			if(user!=null)
+			{
+				jsonIN.put("compy_name", user.getName());
+			}
+			
+			doGetList(jsonIN, jsonOut);
 
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
@@ -126,9 +95,6 @@ public class PhoneAccountController extends BaseController {
 		JsonUtil.responseOutWithJson(response, rst);
 
 	}
-	
-	
-	
 	
 	/**
 	 * 页面-获取phoneaccount列表
@@ -160,35 +126,7 @@ public class PhoneAccountController extends BaseController {
 		try {
 
 			jsonIN = new JSONObject(data);
-
-			String compy_name = jsonIN.optString("compy_name");
-			String ip = jsonIN.optString("ip");
-			String id = jsonIN.optString("id");
-			String city = jsonIN.optString("city");
-
-			int pageCount = jsonIN.optInt("rows");// request.getParameter("pageCount");
-			int curPage = jsonIN.optInt("page");
-
-			PhoneAccount query = new PhoneAccount();
-			query.setPage(curPage);
-			query.setPageCount(pageCount);
-
-			query.setIp(ip);
-			query.setCity(city);
-			query.setAccountid(id);
-			query.setCompany_name(compy_name);
-
-			List<PhoneAccount> infos = phoneaccountService
-					.getPhoneAccountPageList(query);
-			int total = phoneaccountService.getPhoneAccountPageListCount(query);
-
-			Gson gs = new Gson();
-			String jsStr = gs.toJson(infos);
-
-			jsonOut.put("ResponseCode", "200");
-			jsonOut.put("ResponseMsg", "");
-			jsonOut.put("total", total);
-			jsonOut.put("datalist", jsStr);
+			doGetList(jsonIN, jsonOut);
 
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
@@ -207,6 +145,39 @@ public class PhoneAccountController extends BaseController {
 		rst = jsonOut.toString();
 		JsonUtil.responseOutWithJson(response, rst);
 
+	}
+
+	private void doGetList(JSONObject jsonIN, JSONObject jsonOut)
+			throws JSONException {
+
+		String compy_name = jsonIN.optString("compy_name");
+		String ip = jsonIN.optString("ip");
+		String id = jsonIN.optString("id");
+		String city = jsonIN.optString("city");
+
+		int pageCount = jsonIN.optInt("rows");// request.getParameter("pageCount");
+		int curPage = jsonIN.optInt("page");
+
+		PhoneAccount query = new PhoneAccount();
+		query.setPage(curPage);
+		query.setPageCount(pageCount);
+
+		query.setIp(ip);
+		query.setCity(city);
+		query.setAccountid(id);
+		query.setCompany_name(compy_name);
+
+		List<PhoneAccount> infos = phoneaccountService
+				.getPhoneAccountPageList(query);
+		int total = phoneaccountService.getPhoneAccountPageListCount(query);
+
+		Gson gs = new Gson();
+		String jsStr = gs.toJson(infos);
+
+		jsonOut.put("ResponseCode", "200");
+		jsonOut.put("ResponseMsg", "");
+		jsonOut.put("total", total);
+		jsonOut.put("datalist", jsStr);
 	}
 
 	/**
@@ -256,7 +227,10 @@ public class PhoneAccountController extends BaseController {
 						.getPhoneAccountInfoById(recordid);
 				phoneaccount.setUpdate_date(time);
 				phoneaccount.setIp_refresh_interval(ip_refresh_interval);
+
 				phoneaccount.setCity(city);
+				phoneaccount.setAccountid(accountid);
+				phoneaccount.setCompany_userid(company_userid);
 
 				/*
 				 * if (user != null) phoneaccount.setUpdatedby(user.getName());

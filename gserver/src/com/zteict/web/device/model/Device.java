@@ -13,6 +13,10 @@ public class Device  extends BaseModel{
 	private String 	link_url;	//链接url
 	private String 	onlinetime;  	//创建者
 	private String 	offlinetime;	//创建时间
+	
+	private String 	showall;	//为true 查询全部；否则 过滤offline为空的
+	
+	
 	public Integer getRecordid() {
 		return recordid;
 	}
@@ -55,6 +59,12 @@ public class Device  extends BaseModel{
 	}
 	public void setRouteid(String routeid) {
 		this.routeid = routeid;
+	}
+	public String getShowall() {
+		return showall;
+	}
+	public void setShowall(String showall) {
+		this.showall = showall;
 	}
 	
 	

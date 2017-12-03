@@ -26,9 +26,14 @@ import com.zteict.tool.config.ConfigReader;
 import com.zteict.tool.utils.AESEncrtptZteimweb;
 import com.zteict.tool.utils.MsgSvrCall;
 
+import com.zteict.web.company.model.Company;
+import com.zteict.web.company.service.CompanyService;
 import com.zteict.web.system.action.base.BaseController;
 import com.zteict.web.system.model.SysUserBean;
+import com.zteict.web.system.model.TokenBean;
+import com.zteict.web.system.model.SysUserBean.UserType;
 import com.zteict.web.system.service.SysUserService;
+import com.zteict.web.system.service.TokenService;
 
 
 
@@ -44,9 +49,6 @@ import com.zteict.web.system.service.SysUserService;
 public class SysUserController extends BaseController {
 	// 日志打印对象
 	private Logger logger = Logger.getLogger(SysUserController.class);
-
-	@Autowired
-	private SysUserService sysUserService;
 
 
 	/**
@@ -67,6 +69,17 @@ public class SysUserController extends BaseController {
 		
 		return "/home/index";
 	}
+	
+
+	@Autowired
+	private TokenService tokenService;
+
+	@Autowired
+	private SysUserService sysUserService;
+
+	@Autowired
+	private CompanyService companyService;
+
 
 	/**
 	 * 后台登录请求,验证用户
@@ -89,34 +102,129 @@ public class SysUserController extends BaseController {
 			@RequestParam("password") String password) {
 		String msg = "";
 		int sucess = 0;
-		password = Md5Encrypt.MD5(password);
+		String md5password = Md5Encrypt.MD5(password);
 		// 用户名不区分大小写
 		userid = userid.toLowerCase();
 
-		SysUserBean sUser = new SysUserBean();
-		sUser.setUserid(userid);
-		sUser.setPassword(password);
+		SysUserBean userInfo = new SysUserBean();
+		userInfo.setUserid(userid);
+		userInfo.setPassword(md5password);// (userid);
 
-		SysUserBean user = sysUserService.getUserInfoByUseridAndPwd(sUser);
-		
+		SysUserBean usr = sysUserService.getUserInfoByUseridAndPwd(userInfo);
 
-		if (user == null) {
-			msg = "用户名或密码错误";
-			sucess = 0;
+		HashMap<String, Object> map = new HashMap();
+		if (usr == null) {
+
+			//
+			Company cusr = companyService.getCompanyInfoByAccountAndPass(
+					userid, password);
+			if (cusr == null) {
+				msg = "用户名或密码错误";
+				sucess = 0;
+			} else {
+				sucess = 1;
+				usr = new SysUserBean();
+				usr.setUserid(cusr.getAccountid());
+				usr.setUtype(UserType.Company);
+				usr.setName(cusr.getCompany_name());
+				map.put("type", UserType.Company.toString());
+				session.setAttribute(Constant.SESSION_USER, usr);
+				createToken(request, usr, "");
+				
+			}
 		} else {
 			msg = "";
 			sucess = 1;
-			session.setAttribute(Constant.SESSION_USER, user);
-		}
-		HashMap<String, Object> map = new HashMap();
-		map.put("sucess", Integer.valueOf(sucess));
-		map.put("msg", msg);
-		
-	
 
+			map.put("userid", usr.getUserid());
+			map.put("type", UserType.Admin.toString());
+
+			usr.setUtype(UserType.Admin);
+			
+			createToken(request, usr, "");
+
+			session.setAttribute(Constant.SESSION_USER, usr);
+		}
+		map.put("sucess", Integer.valueOf(sucess));
 		
-		
+		map.put("msg", msg);
 		return map;
+	}
+	
+	/**
+	 * 构造登录令牌
+	 * 
+	 * @param request
+	 *            HttpServletRequest
+	 * @return 登录令牌
+	 */
+	private TokenBean constructTokenBean(HttpServletRequest request,
+			SysUserBean bean) {
+		TokenBean tokenBean = null;
+		HttpSession session = request.getSession();
+		String info = bean.getUserid() + "|" + "2";
+		if (bean != null) {
+			tokenBean = new TokenBean(session.getId(), bean.getUserid(),
+					new Date(System.currentTimeMillis()), info);
+		}
+		return tokenBean;
+	}
+
+	/**
+	 * 创建token， 如果之前第三方认证，有token返回，则使用返回的token, 否则使用sessionid生成token值返回给客户端
+	 * 
+	 * @param loginId
+	 *            登录id
+	 * @param terminalType
+	 *            终端类型
+	 * @param lang
+	 *            客户端语言
+	 * @param bean
+	 *            用户信息
+	 */
+	@SuppressWarnings("null")
+	private TokenBean createToken(HttpServletRequest request, SysUserBean bean,
+			String token) {
+		// logger.info("构造token并添加到内存和数据库中");
+		// 构造token
+		TokenBean tokenBean = constructTokenBean(request, bean);
+		// logger.info("UserId:" + tokenBean.getUserId());
+		if (token != null && !"".equals(token)) {// 如果之前的认证有token返回，则使用认证的token
+			tokenBean.setToken(token);
+		}
+		logger.info("构造token成功:token:" + tokenBean.getToken());
+
+		/**
+		 * 写入token到数据库
+		 */
+		// logger.info("去数据库中查询是否有token记录");
+		TokenBean hasBean = tokenService
+				.hasTokenbyUserId(tokenBean.getUserId());
+		/**
+		 * 如果存在 则直接更新最新的Token记录
+		 */
+		if (hasBean != null) {
+			logger.info("用户" + tokenBean.getUserId() + "在数据库中的token存在:"
+					+ hasBean);
+			
+			tokenService.deleteTokenInfo( tokenBean.getToken());
+			
+			tokenService.updateTokenInfo(tokenBean);
+			logger.info("用户" + tokenBean.getUserId() + "在数据库中的token值更新为:"
+					+ tokenBean.getToken());
+		} else {
+
+			String tokens = tokenBean.getToken();
+			
+			tokenService.deleteTokenInfo(tokens);
+		
+			
+			tokenService.insertTokenInfo(tokenBean);
+		}
+		/*logger.info(tokenBean.getUserId() + "-向客户端返回的token值为:"
+				+ tokenBean.getToken());*/
+		return tokenBean;
+
 	}
 
 	/**
@@ -129,7 +237,7 @@ public class SysUserController extends BaseController {
 	@RequestMapping(value = "/logout")
 	public String logout(HttpSession session) {
 		session.removeAttribute(Constant.SESSION_USER);
-		return "/home/login";
+		return "/login";
 	}
 
 	/**

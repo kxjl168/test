@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zteict.web.privilege.dao.SysUserBeanDao">
+
+	<resultMap id="ManagerResMap" type="com.zteict.web.system.model.SysUserBean">
+		<result column="managerid" property="userid" />
+		<result column="managername" property="name" />
+		<result column="password" property="password" />
+		<result column="role_id" property="role_id" />
+		<result column="role_name" property="role_name" />
+		<result column="menu_ids" property="menu_ids" />
+		<result column="createby" property="createby" />
+		<result column="createdate" property="createdate" />
+		<result column="updatedby" property="updatedby" />
+		<result column="updateddate" property="updateddate" />
+
+
+	</resultMap>
+
+
+
+	<!-- public int addSysUserBean(SysUserBean SysUserBean); -->
+
+	<insert id="addSysUserBean" parameterType="com.zteict.web.system.model.SysUserBean">
+		insert into manager
+		(managerid,managername,password,createby,createdate)
+		values(#{userid},#{name},#{password},#{createby},#{createdate})
+	</insert>
+
+
+	<!-- public int deleteSysUserBean(SysUserBean role); -->
+
+	<delete id="deleteSysUserBean" parameterType="com.zteict.web.system.model.SysUserBean">
+		delete from manager
+		where managerid = #{userid}
+	</delete>
+
+
+	<!-- public int updateSysUserBean(SysUserBean SysUserBean); -->
+
+	<update id="updateSysUserBean" parameterType="com.zteict.web.system.model.SysUserBean">
+		update manager set
+		updateddate=now()
+		<if test='name != null and name!="" '>
+			,managername=#{name}
+		</if>
+		<if test='password != null'>
+			,password=#{password}
+		</if>
+
+	
+		where managerid=#{userid}
+	</update>
+
+
+	<!-- public List<SysUserBean> getSysUserBeanPageList(SysUserBean query); -->
+
+	<select id="getSysUserBeanPageList" parameterType="com.zteict.web.system.model.SysUserBean"
+		resultMap="ManagerResMap">
+		select * from (
+		select  distinct m.*, GROUP_CONCAT(r.role_zh) role_name from manager m
+		left join manager_role mr on m.managerid=mr.manager_id
+		left join role r on mr.role_id=r.role_en
+where 1=1
+		<if test='name != null and name != "" '>
+			and m.managername like CONCAT('%',#{name},'%')
+		</if>
+		<if test='userid != null and userid != "" '>
+			and m.managerid like CONCAT('%',#{userid},'%')
+		</if>
+		group by m.managerid
+		) tp
+		 limit #{start},#{pageCount}
+	</select>
+
+	<!-- public int getSysUserBeanPageListCount(SysUserBean query); -->
+
+	<select id="getSysUserBeanPageListCount" parameterType="com.zteict.web.system.model.SysUserBean"
+		resultType="java.lang.Integer">
+		select count(*) from manager
+		where 1=1
+		<if test='name != null and name != "" '>
+			and managername like CONCAT('%',#{name},'%')
+		</if>
+		<if test='userid != null and userid != "" '>
+			and managerid like CONCAT('%',#{userid},'%')
+		</if>
+
+	</select>
+
+
+
+	<!-- public SysUserBean getSysUserBeanInfoById(SysUserBean query); -->
+
+
+	<select id="getSysUserBeanInfoById" resultType="com.zteict.web.system.model.SysUserBean"
+		parameterType="com.zteict.web.system.model.SysUserBean">
+		select managerid userid,managername name ,m.* from manager
+		m
+		where m.managerid =
+		#{userid}
+	</select>
+
+
+
+
+
+
+
+	<update id="updateSysuer" parameterType="com.zteict.web.system.model.SysUserBean">
+
+		update manager set password = #{password} where managerid=#{userid}
+
+	</update>
+
+	<select id="getUserListInfo" resultMap="ManagerResMap"
+		parameterType="com.zteict.web.system.model.SysUserBean">
+		select managerid,managername,password from manager m
+		where 1=1
+		<if test='name != null and name !="" '>
+
+			and ( managername like CONCAT('%',#{name},'%')
+			or managerid like CONCAT('%',#{name},'%') )
+		</if>
+
+
+	</select>
+
+
+</mapper>

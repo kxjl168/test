@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zteict.web.system.dao.MenuInfoDao">
+
+
+	<resultMap id="menuInfoMap" type="com.zteict.web.system.model.MenuInfo">
+		<result property="menuId" column="menu_id"/>
+		<result property="menuOrderid" column="menu_orderid"/>
+		<result property="menuParentid" column="menu_parentid"/>
+		<result property="menuName" column="menu_name"/>
+		<result property="menuUrl" column="menu_url"/>
+		<result property="menuICO" column="menu_ico"/>
+			<result property="menuGroup" column="menu_group"/>
+		
+	</resultMap>
+	<select id= "queryRootMenus" resultMap = "menuInfoMap">
+		select * from menu_info where menu_parentid is null order by menu_orderid asc;
+	</select>
+	<select id= "queryMenusByParent" resultMap = "menuInfoMap" parameterType="java.lang.String">
+		select * from menu_info where menu_parentid = #{parentId} order by menu_orderid asc;
+	</select>
+</mapper>

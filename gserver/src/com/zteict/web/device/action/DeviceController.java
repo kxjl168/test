@@ -71,6 +71,9 @@ public class DeviceController extends BaseController {
 			String deviceid = jsonIN.optString("deviceid");
 			String ip = jsonIN.optString("ip");
 			String city = jsonIN.optString("city");
+			
+			String showall = jsonIN.optString("showall");
+
 
 			int pageCount = jsonIN.optInt("rows");// request.getParameter("pageCount");
 			int curPage = jsonIN.optInt("page");
@@ -82,6 +85,7 @@ public class DeviceController extends BaseController {
 			query.setRouteid(deviceid);
 			query.setIp(ip);
 			query.setCity(city);
+			query.setShowall(showall);
 
 			List<Device> infos = deviceService.getDevicePageList(query);
 			int total = deviceService.getDevicePageListCount(query);

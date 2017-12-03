@@ -23,6 +23,7 @@
 					href="${basePath}/css/swiper_zcfg.css">
 <script type="text/javascript" src="${basePath}/js/login.js"></script>
 <script type="text/javascript" src="${basePath}/js/code.js"></script>
+<script type="text/javascript" src="${basePath}/js/loading.js"></script>
 <script type="text/javascript">
 	
 </script>
@@ -131,12 +132,12 @@
 </div>
 					<div class="form-group row-margin-top-10 form-inline ">
 						<!-- <div class="col-xs-offset-1 col-xs-10"> -->
-						<div class="input-group col-xs-offset-0 col-xs-8 pull-left">
+						<div class="input-group col-xs-offset-0 col-xs-12 pull-left">
 							<button type="button" onclick="checkLogin();"
 								class="btn btn-primary btn-block  ">登录</button>
 						
 						</div>
-							<div class="input-group  col-xs-4  col-lg-4  ">
+							<div class=" hide input-group  col-xs-4  col-lg-4  ">
 
 								<a class=" control-label " href="reg.jsp">
 								<span class="unline">注册</span>

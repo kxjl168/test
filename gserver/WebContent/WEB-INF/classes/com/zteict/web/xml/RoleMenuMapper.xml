@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zteict.web.privilege.dao.RoleMenuDao">
+
+	<resultMap id="ManagerResMap" type="com.zteict.web.privilege.model.RoleMenu">
+	</resultMap>
+
+	<resultMap id="RoleMap" type="com.zteict.web.privilege.model.Role">
+	</resultMap>
+<resultMap id="MenuMap" type="com.zteict.web.system.model.MenuInfo">
+	</resultMap>
+
+
+
+	<!-- public int addRoleMenu(RoleMenu RoleMenu); -->
+
+	<insert id="addRoleMenu" parameterType="com.zteict.web.privilege.model.RoleMenu">
+		insert into
+		role_menu
+
+		values(#{role_id},#{menu_id})
+	</insert>
+
+
+	<!-- public int deleteRoleMenu(SysUserBean user); -->
+
+	<delete id="deleteRoleMenu" parameterType="com.zteict.web.privilege.model.RoleMenu">
+		delete from
+		role_menu
+		where role_id = #{role_id}
+	</delete>
+
+	<!-- public List<Role> getRoleMenuList(SysUserBean query); -->
+
+	<select id="getRoleMenuPageList" parameterType="com.zteict.web.privilege.model.Role"
+		resultMap="MenuMap">
+		select distinct menu.* from 
+role_menu rm 
+ left join menu_info menu on menu.menu_id=rm.menu_id
+ left join role r on rm.role_id=r.role_en
+where r.role_en=#{role_en}
+ 
+
+	</select>
+
+
+
+</mapper>

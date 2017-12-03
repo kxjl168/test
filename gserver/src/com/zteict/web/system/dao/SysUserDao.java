@@ -9,7 +9,7 @@ import com.zteict.web.system.model.SysUserBean;
 
 
 public interface SysUserDao {
-	/**
+	/**ean
 	 * 根据用户名和密码查询后台登录用户账号信息
 	 * 
 	 * @param userid
